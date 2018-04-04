@@ -9,7 +9,7 @@ import tkinter.font as tkFont
 def csvToStringFormat(csvFilePath, stringFormat, outputStream, delimiter = u'auto'):
 	# formattedString = ''
 	# delimiter = u';'
-	delimiter = u','
+	# delimiter = u','
 	with open (csvFilePath, 'r') as f:
 		if delimiter == u"auto":
 			dialect = csv.Sniffer().sniff(f.readline()) #### detect delimiters
@@ -18,15 +18,15 @@ def csvToStringFormat(csvFilePath, stringFormat, outputStream, delimiter = u'aut
 		reader = csv.DictReader(f, delimiter=delimiter)
 		for row in reader:
 			# print(stringFormat)
-			print(dict(row))
+			# print(dict(row))
 			# formattedString += stringFormat.format(**dict(row))
 			print(stringFormat.format(**dict(row)), file=outputStream)
 	# return formattedString
 	return
 
-def writeFileFromCsvAndTemplate(csvFilePath, stringFormat, sqlFilePath, replacements=()):
+def writeFileFromCsvAndTemplate(csvFilePath, stringFormat, sqlFilePath, replacements=(), delimiter = u'auto'):
 	outputStream = io.StringIO('')
-	csvToStringFormat(csvFilePath, stringFormat, outputStream)
+	csvToStringFormat(csvFilePath, stringFormat, outputStream, delimiter)
 	outputString = outputStream.getvalue()
 	outputStream.close();
 	# print(outputString)
@@ -52,8 +52,8 @@ def mainGui():
 	with appJar.gui("Rename episodes", font={'size':12}) as app:
 		app.setLogLevel(u'DEBUG')
 		app.entry(u"csvFilePath", label=u"Csv path", kind='file', default=u'-- CSV file to use --')
-		app.optionBox(u"templateLanguage", [u"normal text",u"sql"], label=u"Template language")
 		app.optionBox(u"csvSeparator", [u"auto",u",",u";"], label=u"CSV Separator")
+		app.optionBox(u"templateLanguage", [u"normal text",u"sql"], label=u"Template language")
 		def highlightSyntaxOnChange(widgetName):
 			highlightSyntax(app, widgetName)
 			return
@@ -95,13 +95,14 @@ def mainGui():
 					return
 				if not app.yesNoBox(u"Overwrite warning", u"The file at path "+exportFilePath+u' already exists. Are you sure you want to overwrite it?'):
 					return
+			delimiter = app.getOptionBox(u"csvSeparator")
 			# TODO : fill replacements list
 			replacements = list()
 			if app.getCheckBox(u"remplacement_EmptyByNull"):
 				replacements.append(('\'\'','NULL'))
 			if app.getCheckBox(u"remplacement_EqualNullByIsNull"):
 				replacements.append((' = NULL',' IS NULL'))
-			writeFileFromCsvAndTemplate(csvFilePath, stringFormat, exportFilePath, replacements)
+			writeFileFromCsvAndTemplate(csvFilePath, stringFormat, exportFilePath, replacements, delimiter)
 			return
 		app.button(u"Create filled file", createFileFromCsvButtonPressed)
 	return
