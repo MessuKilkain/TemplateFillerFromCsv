@@ -24,6 +24,10 @@ def csvToStringFormat(csvFilePath, stringFormat, outputStream, delimiter = u'aut
 	# return formattedString
 	return
 
+def getHeaderListFromCsv(csvFilePath, delimiter = u'auto'):
+	headerList = list()
+	return headerList
+
 def writeFileFromCsvAndTemplate(csvFilePath, stringFormat, sqlFilePath, replacements=(), delimiter = u'auto'):
 	outputStream = io.StringIO('')
 	csvToStringFormat(csvFilePath, stringFormat, outputStream, delimiter)
