@@ -20,6 +20,9 @@ def csvToStringFormat(csvFilePath, stringFormat, outputStream, delimiter = u'aut
 			# print(stringFormat)
 			# print(dict(row))
 			# formattedString += stringFormat.format(**dict(row))
+			#TODO : add check to do that only when using sql syntax
+			for key, value in row.items():
+				row[key] = value.replace("'","''")
 			print(stringFormat.format(**dict(row)), file=outputStream)
 	# return formattedString
 	return
