@@ -51,9 +51,10 @@ def highlightSyntax(app, widgetName):
 	tkText = app.getTextAreaWidget(widgetName)
 	for tag in tkText.tag_names():
 		tkText.tag_remove(tag, u"1.0", u"end")
-	for w in (u'SELECT', u'select'):
-		app.tagTextAreaPattern(widgetName, u"keyword", w)
-	app.tagTextAreaPattern(widgetName, u"template_valid", u"\{[^{}]+\}", regexp=True)
+	# for w in (u'SELECT', u'select'):
+		# app.tagTextAreaPattern(widgetName, u"keyword", w)
+	# app.tagTextAreaPattern(widgetName, u"template_valid", u"\{[^{}]+\}", regexp=True)
+	app.tagTextAreaPattern(widgetName, u"template_valid", u"ADD/i", regexp=True)
 
 def mainGui():
 	with appJar.gui("Rename episodes", font={'size':12}) as app:
